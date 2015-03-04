@@ -3,6 +3,7 @@ import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.util.LinkedList;
 import java.util.Scanner;
+import java.util.Stack;
 
 public class MyJavaTest {
 
@@ -27,18 +28,49 @@ public class MyJavaTest {
 	}
 	public MyJavaTest(){
 //		bigAdd();
-//		findXNum(5, datas, 0, datas.length);
-//		getXNum(5,datas,0,datas.length);
-//		System.out.println("find "+num+" "+5+" in datas");
+		//面试题1
+/*		findXNum(5, datas, 0, datas.length);
+		getXNum(5,datas,0,datas.length);
+		System.out.println("find "+num+" "+5+" in datas")*/;
 		
+		//面试题2
 /*		if (findXIn2Dimensional(datas2, 13, 0, datas2[0].length - 1)){
 			System.out.println("find "+13+" in datas2.");
 		}else
 			System.out.println("can't find "+20+" in datas2.");*/
 		
-		String replaceStr = " dont    worry,be happy!";
+		//面试题3
+		/*String replaceStr = " dont    worry,be happy!";
 		getReplaceString(replaceStr);
-		System.out.println("out:"+replaceStr);
+		System.out.println("out:"+replaceStr);*/
+		
+		//面试题4
+		/*Node head = new Node(0);
+		Node deleteNode = null ;
+		MyLinkedList linkedList = new MyLinkedList(head);
+		for(int i = 1;i<10;i++){
+			Node node = new Node(i);
+			linkedList.add(node);
+			if (i == 9){
+				deleteNode = node;
+			}
+		}
+		System.out.println(linkedList);
+		linkedList.delete(deleteNode);
+		System.out.println(linkedList);*/
+		
+		//面试题5
+		Node head = new Node(0);
+		MyLinkedList linkedList = new MyLinkedList(head);
+		for(int i = 1;i<10;i++){
+			Node node = new Node(i);
+			linkedList.add(node);
+		}
+		//利用堆栈方式
+		rePrintLinkedList(linkedList);
+		//利用递归方式
+//		recursionLinkedList(head);
+//		System.out.println(linkedList);
 		
 	}
 
@@ -51,7 +83,8 @@ public class MyJavaTest {
 			
 	}
 	/******************************************************************
-	 * 在一个有序一位数组中查找k出现的次数，eg:{1,1,2,2,3,5,5,5,,6,8,9} k=5,返回 3。
+	 * 面试题1 <br>
+	 * 在一个有序一位数组中查找k出现的次数，eg:{1,1,2,2,3,5,5,5,6,8,9} k=5,返回 3。
 	 * 
 	 * tips:有序查找 想到二分查找
 	 * 		找到第一个k和最后一个k的两个下标后，即得个数。
@@ -225,6 +258,7 @@ public class MyJavaTest {
 	
 	
 /********************************************************************************************
+ * 面试题2 <br>
  * 在一个二维数组中，每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序。请完成一个函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数。<br>
  * 
  * 1   2   8   9   <br>
@@ -270,6 +304,7 @@ public class MyJavaTest {
 	}
 	
 	/********************************************************************************************
+	 * 面试题3 <br>
 	 * 在一个字符串中，把空格符替换成"%20",要求在原字符串上修改，算法高效。</br>
 	 * 
 	 * Tips： </br>
@@ -322,6 +357,7 @@ public class MyJavaTest {
 	
 	
 	/********************************************************************************************
+	 * 面试题4 <br>
 	 * 给定待删链表结点，实现链表的O（1）删除。</br>
 	 * 
 	 * Tips： </br>
@@ -344,17 +380,21 @@ public class MyJavaTest {
 		
 		public Node(int value){
 			this.value = value;
-			this.count = count++;
+			this.count++;
+			this.nextNode = null;
 		}
 
-		public void print(){
-			System.out.println("value:  "+value+"  nextNode:  "+nextNode);
+		public Node(int value, Node nextNode){
+			this.value = value;
+			this.nextNode = nextNode;
+			this.count ++;
 		}
-
+		
 		@Override
 		public String toString() {
 			// TODO Auto-generated method stub
-			return nextNode.count+"";
+			String str = "value: "+value+", ";
+			return str;
 		}
 		
 	}
@@ -372,22 +412,30 @@ public class MyJavaTest {
 		private Node head;
 		
 		/**
+		 * 尾结点
+		 */
+		private Node tail;
+		
+		/**
 		 * 链表大小
 		 */
 		private int size;
 
-		public MyLinkedList(){
-			head = null;
+		public MyLinkedList(Node node){
+			this.setHead(node);
+			this.setTail(node);
 			size = 0;
 		}
 		
 		/**
-		 * 在指定位置插入新结点
+		 * 在指定尾部添加新结点
 		 * @param node
-		 * @param offset
 		 */
-		public void insert(Node node, int offset){
-			
+		public void add(Node node){
+			Node tailNode = getTail();
+			tailNode.nextNode = node;
+			node.nextNode = null;
+			this.setTail(node);
 		}
 		
 		/**
@@ -397,6 +445,11 @@ public class MyJavaTest {
 		public void delete(Node node){
 			Node preNode = getHead();
 			Node nextNode;
+			
+			if(preNode == null){
+				System.out.println("List is null.");   
+				return;
+			}
 			//待删结点不在最后一个,O(1)
 			if(node.nextNode != null){
 				nextNode = node.nextNode;
@@ -404,15 +457,41 @@ public class MyJavaTest {
 				node.nextNode = nextNode.nextNode;
 				node = null;
 			}else{
-				//是最后一个，但不是头一个 O(n)
-				while(preNode.nextNode != node){
-					preNode = preNode.nextNode;
+				//是头一个 也是最后一个 同时还恰好是待删结点
+				if (preNode.nextNode == null && preNode == node){
+					node = null;
+					setHead(null);
 				}
-				
+				else{
+					//是最后一个，但不是头一个 O(n)
+					while(preNode != null && preNode.nextNode != node){
+						preNode = preNode.nextNode;
+					}
+					if (preNode == null){
+						System.out.println("there is no such node");
+					}else{
+						preNode.nextNode = null;
+						node = null;
+					}
+				}
 			}
+			
 				
 		}
 		
+		@Override
+		public String toString() {
+			// TODO Auto-generated method stub
+			String str = "[";
+			Node temp = getHead();
+			while(temp != null){
+				str = str + temp.toString();
+				temp = temp.nextNode;
+			}
+			str = str + "]";
+			return str;
+		}
+
 		public Node getHead() {
 			return head;
 		}
@@ -428,7 +507,105 @@ public class MyJavaTest {
 		private synchronized void setSize(int size) {
 			this.size = size;
 		}
+
+		public Node getTail() {
+			return tail;
+		}
+
+		public synchronized void setTail(Node tail) {
+			this.tail = tail;
+		}
 		
+		
+		
+	}
+/********************************************************************************************
+	 * 面试题5 <br>
+	 * 倒序输出一个链表。</br>
+	 * 
+	 * Tips： </br>
+	 * 1. 要输出链表，只能遍历。而链表的特性是只能从头遍历，这点无法改变。
+	 * 2. 既然从头开始，要倒序输出，便是“先遍历的后输出”跟栈的“先进后出”相符，于是想到利用堆栈来实现。
+	 *    
+	 * **************************************************************************************/
+	
+	/**
+	 * 
+	 * 利用上面的Node类，实现一个链表形式的堆栈
+	 * @author 21427754
+	 *
+	 */
+	private class MyStack{
+		
+		/**
+		 * 栈顶结点
+		 */
+		private Node top;
+		private int size;
+		
+		public synchronized Node pop(){
+			if (top != null && size > 0){
+				Node node = top;
+				top = top.nextNode;
+				size--;
+				return node;
+			}else
+				return null;
+		}
+		
+		public synchronized void push(Node node){
+			if (node != null){
+				node.nextNode = top;
+				top = node;
+				size++;
+			}
+		}
+		
+		public int getSize(){
+			return size;
+		}
+	}
+	
+	/**
+	 * 倒序输出链表的所有结点
+	 * @param list 待处理的链表
+	 */
+	private void rePrintLinkedList(MyLinkedList list){
+		MyStack mStack = new MyStack();
+		Node node = list.getHead();
+		while(node != null){
+			//这段代码无效 会改变链表结构 因为temp = node是将temp指向node所在的同一块内存  是一块内存的两个别名引用而已
+			/*Node temp = new Node(-1);
+			temp = node;*/
+			
+			Node temp = new Node(node.value, node.nextNode);
+			mStack.push(temp);
+			node = node.nextNode;
+		}
+		
+		while(mStack.getSize() > 0){
+			Node _node = mStack.pop();
+			System.out.println(_node);
+		}
+		
+	}
+	
+	/**
+	 * 递归倒序输出链表所有结点
+	 * @param list 待处理的链表
+	 */
+	private void recursionLinkedList(Node node){
+		if (node == null)
+			return;
+		recursionLinkedList(node.nextNode);
+		System.out.println(node);
+		//以下也行
+		/*if (node != null){
+			if (node.nextNode != null){
+				recursionLinkedList(node.nextNode);
+			}
+			System.out.println(node);
+		}*/
 	}
 	
 }
