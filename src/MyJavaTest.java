@@ -60,7 +60,7 @@ public class MyJavaTest {
 		System.out.println(linkedList);*/
 		
 		//面试题5
-		Node head = new Node(0);
+		/*Node head = new Node(0);
 		MyLinkedList linkedList = new MyLinkedList(head);
 		for(int i = 1;i<10;i++){
 			Node node = new Node(i);
@@ -71,7 +71,29 @@ public class MyJavaTest {
 		//利用递归方式
 //		recursionLinkedList(head);
 //		System.out.println(linkedList);
+*/		
 		
+		//面试题6
+		/*long start = System.currentTimeMillis();
+		System.out.println(recurseFibonacci(50));//n = 50,cost=182469ms.  value = 12586269025
+//		System.out.println(forFibonacci(50));///n = 50,cost=1ms. value = 12586269025
+		long end = System.currentTimeMillis();
+		long cost = end - start;
+		System.out.println("cost: "+ cost+ " ms");*/
+		
+		//面试题7
+		MyQueue myQueue = new MyQueue();
+		for (int i = 0;i<10;i++){
+			Node node = new Node(i);
+			myQueue.append(node);
+		}
+		System.out.println(myQueue.toString());
+		int count = 3;
+		while(count > 0){
+			count --;
+			System.out.println(myQueue.delete().toString());
+		}
+		System.out.println(myQueue.toString());
 	}
 
 	/**
@@ -606,6 +628,124 @@ public class MyJavaTest {
 			}
 			System.out.println(node);
 		}*/
+	}
+	
+	/********************************************************************************************
+	 * 面试题6 <br>
+	 * 根据输入的N值，计算斐波那契数列对应的值。斐波那契数列定义，n>=2.</br>
+	 * 
+	 * Tips： </br>
+	 * 1. 递归实现，但效率低下，当n很大时，容易出现调用栈的溢出。有点是代码简洁，面试时无特殊要求时，优先考虑递归。
+	 * 2. 循环实现，效率优于递归。其思路类似于一种“倒递归”或是一般正常思路，顺序解决。如，求f(2),先求f(0)和f(1)。求f(3),先求f(1)和f(2)
+	 * </br>
+	 * 下面列出两种实现方式：
+	 * **************************************************************************************/
+	
+	/**
+	 * 递归
+	 * @return 计算结果
+	 */
+	private long recurseFibonacci(int n){
+		if (n == 0)
+			return 0;
+		if (n == 1)
+			return 1;
+		
+		return recurseFibonacci(n - 1) + recurseFibonacci(n - 2);
+	}
+	
+	/**
+	 * 循环
+	 * @return 计算结果
+	 */
+	private long forFibonacci(int n){
+		long value = 0;
+		long fValueFirst = 0;
+		long fValueSecond = 1;
+		
+		while(n - 2 >= 0){
+			value = fValueFirst + fValueSecond;
+			fValueFirst = fValueSecond;
+			fValueSecond = value;
+			n--;
+		}
+		
+		return value;
+	}
+	
+	/********************************************************************************************
+	 * 面试题7 <br>
+	 * 利用两个栈实现一个队列，并实现队列的队尾插入和队首删除两个方法</br>
+	 * 
+	 * Tips： </br>
+	 * 栈：先入后出     队列：先入先出</br>
+	 * 问题就变成如何利用两个先入后出变成一个先入先出
+	 * **************************************************************************************/
+	
+	/**
+	 * 两个栈组成的队列
+	 * @author 21427754
+	 *
+	 */
+	private class MyQueue{
+		
+		private MyStack stackIn;
+		private MyStack stackOut;
+		
+		
+		public MyQueue(){
+			stackIn = new MyStack();
+			stackOut = new MyStack();
+		}
+		
+		public MyQueue(MyStack stackIn , MyStack stackOut){
+			this.stackIn = stackIn;
+			this.stackOut = stackOut;
+		}
+		
+		/**
+		 * 队尾添加结点
+		 * @param node 待添加结点
+		 * @return 成功返回true
+		 */
+		public synchronized boolean append(Node node){
+			if (stackIn != null){
+				stackIn.push(node);
+				return true;
+			}
+			return false;
+		}
+		
+		/**
+		 * 删除队头，即出队列
+		 * @return
+		 */
+		public synchronized Node delete(){
+			if (stackOut != null && stackOut.size>0){
+				return stackOut.pop();
+			}else{
+				if (stackIn != null && stackIn.size>0){
+					while(stackIn.size > 0){
+						Node node = stackIn.pop();
+						stackOut.push(node);
+					}
+					return stackOut.pop();
+				}else
+					return null;
+			}
+		}
+
+		@Override
+		public String toString() {
+			String str = "";
+			Node node = this.delete();
+			while (node!=null){
+				str = str + node.toString();
+				node = this.delete();
+			}
+			return str;
+		}
+		
 	}
 	
 }
