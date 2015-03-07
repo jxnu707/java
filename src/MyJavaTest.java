@@ -87,11 +87,13 @@ public class MyJavaTest {
 			Node node = new Node(i);
 			myQueue.append(node);
 		}
-		System.out.println(myQueue.toString());
+//		System.out.println(myQueue.toString());
+		//出队三次
 		int count = 3;
 		while(count > 0){
 			count --;
-			System.out.println(myQueue.delete().toString());
+			Node node = myQueue.delete();
+			System.out.println(node.toString());
 		}
 		System.out.println(myQueue.toString());
 	}
