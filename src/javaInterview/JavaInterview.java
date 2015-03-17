@@ -1,3 +1,4 @@
+package javaInterview;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
@@ -5,7 +6,7 @@ import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.Stack;
 
-public class MyJavaTest {
+public class JavaInterview {
 
 	private static BigInteger sum;
 	private static String a;
@@ -26,7 +27,7 @@ public class MyJavaTest {
 		startMills = System.currentTimeMillis();
 		MOD_NUM = new BigInteger("1000000007");
 	}
-	public MyJavaTest(){
+	public JavaInterview(){
 //		bigAdd();
 		//面试题1
 /*		findXNum(5, datas, 0, datas.length);
@@ -60,18 +61,22 @@ public class MyJavaTest {
 		System.out.println(linkedList);*/
 		
 		//面试题5
-		/*Node head = new Node(0);
+		Node head = new Node(0);
 		MyLinkedList linkedList = new MyLinkedList(head);
-		for(int i = 1;i<10;i++){
+		for(int i = 1;i<3;i++){
 			Node node = new Node(i);
 			linkedList.add(node);
 		}
+
+		reverseList(head);
+		
+		linkedList.setHead(linkedList.getTail());
 		//利用堆栈方式
-		rePrintLinkedList(linkedList);
+//		rePrintLinkedList(linkedList);
 		//利用递归方式
 //		recursionLinkedList(head);
-//		System.out.println(linkedList);
-*/		
+		System.out.println(linkedList);
+		
 		
 		//面试题6
 		/*long start = System.currentTimeMillis();
@@ -82,20 +87,25 @@ public class MyJavaTest {
 		System.out.println("cost: "+ cost+ " ms");*/
 		
 		//面试题7
-		MyQueue myQueue = new MyQueue();
+/*		MyQueue myQueue = new MyQueue();
 		for (int i = 0;i<10;i++){
 			Node node = new Node(i);
 			myQueue.append(node);
 		}
-//		System.out.println(myQueue.toString());
+		System.out.println(myQueue.toString());
 		//出队三次
 		int count = 3;
 		while(count > 0){
 			count --;
 			Node node = myQueue.delete();
-			System.out.println(node.toString());
+			if (node != null)
+				System.out.println(node.toString());
+			else
+				break;
 		}
-		System.out.println(myQueue.toString());
+		System.out.println(myQueue.toString());*/
+		
+		                                                                                                                                     
 	}
 
 	/**
@@ -103,7 +113,7 @@ public class MyJavaTest {
 	 */
 	public static void main(String[] args) {
 		
-		MyJavaTest a = new MyJavaTest();
+		JavaInterview a = new JavaInterview();
 			
 	}
 	/******************************************************************
@@ -401,6 +411,11 @@ public class MyJavaTest {
 		protected int value;
 		protected Node nextNode;
 		
+		public Node(){
+			this.count = -1;
+			this.value = -1;
+			this.nextNode = null;
+		}
 		
 		public Node(int value){
 			this.value = value;
@@ -732,8 +747,11 @@ public class MyJavaTest {
 						stackOut.push(node);
 					}
 					return stackOut.pop();
-				}else
+				}else{
+					System.out.println("queue is empty!");
 					return null;
+				}
+					
 			}
 		}
 
@@ -749,5 +767,30 @@ public class MyJavaTest {
 		}
 		
 	}
+
+//******************************************************************************************************
+	/**
+	 * 递归实现反转链表
+	 * @param head
+	 * @return
+	 */
+	private Node reverseList(Node head){
+		//链表头为空或到了链表尾结点
+		if (head == null){
+			return null;
+		}
+		Node preNode = reverseList(head.nextNode);
+		if (preNode == null){
+			preNode = head;
+		}
+		
+		else{
+			preNode.nextNode = head;
+			head.nextNode = null;
+		}
+		return head;
+	}
+//******************************************************************************************************	
+	
 	
 }
