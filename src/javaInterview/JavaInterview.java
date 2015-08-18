@@ -2,9 +2,13 @@ package javaInterview;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.Stack;
+
+import org.junit.Test;
 
 public class JavaInterview {
 
@@ -61,7 +65,7 @@ public class JavaInterview {
 		System.out.println(linkedList);*/
 		
 		//面试题5
-		Node head = new Node(0);
+/*		Node head = new Node(0);
 		MyLinkedList linkedList = new MyLinkedList(head);
 		for(int i = 1;i<3;i++){
 			Node node = new Node(i);
@@ -76,7 +80,7 @@ public class JavaInterview {
 		//利用递归方式
 //		recursionLinkedList(head);
 		System.out.println(linkedList);
-		
+		*/
 		
 		//面试题6
 		/*long start = System.currentTimeMillis();
@@ -105,7 +109,8 @@ public class JavaInterview {
 		}
 		System.out.println(myQueue.toString());*/
 		
-		                                                                                                                                     
+		//面试题8
+//		this.oddBeforeEven();
 	}
 
 	/**
@@ -793,4 +798,153 @@ public class JavaInterview {
 //******************************************************************************************************	
 	
 	
+	/********************************************************************************************
+	 * 面试题8 <br>
+	 * 使数组中，所有奇数在偶数的前面，只能在原数组的内存上操作。</br>
+	 * 
+	 * Tips： </br>
+	 * 应该有的第一反应：单下标指向第一个元素开始，向后遍历。若为偶数，保存该元素（t）并把从当前下标后的所有元素向前挪一个位置，这样最后一个位置就会空出来，再把t放进去。需要遍历N个元素，最坏情况下
+	 * 			      每碰到一个偶数就需要移动O(n)个数字，所以O(n^2)</br>
+	 * 仔细想：为了加快遍历速度，首尾各加一个下标，同时向中间遍历。调整位置时，只要交换这两个下标的元素即可。
+	 * 扩展：通过接口抽象出分割条件解耦，增强鲁棒性。
+	 * **************************************************************************************/
+	
+	private void oddBeforeEven(){
+		//抽象出数组分割条件可以按 奇偶分  能否被3整除分等
+		ISepareCondition i = new ISepareCondition() {
+			
+			@Override
+			public boolean isSatisfyCondition(int n) {
+				if (n % 2 == 0)
+					return true;
+				else
+					return false;
+			}
+		};
+		
+		int[] a = {1,3,5,7,9,2,4,6,8,0};
+		int l = 0;
+		int h = a.length - 1;
+		if (a != null){
+			while (l < h){
+				if (i.isSatisfyCondition(a[l])){
+					int temp = a[l];
+					while (i.isSatisfyCondition(a[h]) && l < h){
+						h--;
+					}
+					a[l] = a[h];
+					a[h] = temp;
+					h--;
+				}
+				l++;
+			}
+			for (int n:a)
+				System.out.print(n);
+		}
+ 	}
+	
+	private interface ISepareCondition{
+		public boolean isSatisfyCondition(int n);
+	}
+//******************************************************************************************************
+	/**
+	 * 面试题9 <br>
+	 * 对已排序数组去重</br>
+	 * 注意： 传入的原始数组内容会被修改
+	 * @param array 一个已排序的数组
+	 * @return 返回一个无重复元素的新的顺序数组
+	 */
+	public int[] uniArray(int[] array){
+		//对传入参数检验
+		if (array == null){
+			return null;
+		}
+		if (array.length == 1 || array.length == 0)
+			return array;
+		
+		int last = 0;
+		for (int i = 1;i<array.length;i++){
+			if (array[i] != array[last]){
+				last++;
+				array[last] = array[i];
+			}
+		}
+		//copy已去重的数组
+		int[] uniArray = new int[last + 1];
+		for (int i = 0;i<=last;i++){
+			uniArray[i] = array[i];
+		}
+		return uniArray;
+	}
+	
+//******************************************************************************************************
+	/**
+	 * 面试题10</Br>
+	 * 合并两个已排序A B到C</br>
+	 * @author Administrator
+	 * 
+	 */
+	    public ArrayList<Integer> mergeSortedArray(ArrayList<Integer> A, ArrayList<Integer> B) {
+	    	ArrayList<Integer> result = new ArrayList<Integer>();
+	    	//从头开始两两比较 小的放入result中 下标右移
+	    	int i = 0;
+	    	int j = 0;
+	    	
+	    	while(i<A.size() && j<B.size()){
+	    		if (A.get(i) > B.get(j)){
+	    			result.add(B.get(j++));
+	    			
+	    		}else{
+	    			result.add(A.get(i++));
+	    		}
+	    	}
+	    	//若下标此时还未到末尾 说明从i或j到尾部所有元素都大 全部加入到result
+	    	while(i<A.size()){
+	    		result.add(A.get(i++));
+	    	}
+	    	while(j<B.size()){
+	    		result.add(B.get(j++));
+	    	}
+	    	
+	    	return result;
+	    }
+	    
+//******************************************************************************************************
+	/**
+	* 面试题11</Br>
+	* 在一个字符串中，找出第一个只出现了一次的字符（考虑ASCLL字符集中ox21到ox7f字符）</br>
+	* @author Lync
+	* 
+	* 构建一个哈希表，实现字符到该字符在这个字符串中出现个数的映射。实现这个步骤对长度为n的字符串一次遍历即可，O(n)。
+	* 在之前的哈希表中，按给定字符串中字符出现顺序，一次去哈希表中查找该字符出现次数，一次查找为O(1)，对所有字符一次查找为O(n)。
+	* 两次独立循环都为O(n),所以整个算法复杂度仍为O(n)。
+	*/
+	@Test
+	public void findFirstNoReapeat(){
+		/*
+		 * 测试用例
+		 */
+		String str = "dabafcfbcb";
+		
+		char result = 0;
+		if (str == null || str.isEmpty())
+			return;
+		else{
+			int[] hashTable = new int[256];
+			char[] charArray = str.toCharArray();
+			int hashkey = charArray[0];
+			for (int i = 0;i<charArray.length && (hashkey >= 0x21 && hashkey <= 0X7f);i++ ){
+				hashkey = charArray[i];
+				hashTable[hashkey]++;
+			}
+			for (int j = 0;j<charArray.length;j++){
+				if (hashTable[charArray[j]] == 1){
+					result = charArray[j];
+					break;
+				}
+			}
+		}
+		System.out.println(result);
+	}
+		    
 }
