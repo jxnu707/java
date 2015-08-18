@@ -1,18 +1,18 @@
 package algorithm;
 import java.util.Random;   
-//JavaÊµÏÖµÄÅÅĞòÀà  
+//JavaÊµï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  
 public class NumberSort {   
-    //Ë½ÓĞ¹¹Ôì·½·¨£¬½ûÖ¹ÊµÀı»¯  
+    //Ë½ï¿½Ğ¹ï¿½ï¿½ì·½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¹Êµï¿½ï¿½  
     private NumberSort() {   
         super();   
     }    
-    //Ã°Åİ·¨ÅÅĞò 
+    //å†’æ³¡æ’åº
     public static void bubbleSort(int[] numbers) {   
-        int temp; // ¼ÇÂ¼ÁÙÊ±ÖĞ¼äÖµ   
-        int size = numbers.length; // Êı×é´óĞ¡   
+        int temp; // ï¿½ï¿½Â¼ï¿½ï¿½Ê±ï¿½Ğ¼ï¿½Öµ   
+        int size = numbers.length; // ï¿½ï¿½ï¿½ï¿½ï¿½Ğ¡   
         for (int i = 0; i < size - 1; i++) {   
             for (int j = i + 1; j < size; j++) {   
-                if (numbers[i] < numbers[j]) { // ½»»»Á½ÊıµÄÎ»ÖÃ   
+                if (numbers[i] < numbers[j]) { // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½   
                     temp = numbers[i];   
                     numbers[i] = numbers[j];   
                     numbers[j] = temp;   
@@ -20,11 +20,11 @@ public class NumberSort {
             }   
         }   
     }   
-    //¿ìËÙÅÅĞò
+    //å¿«é€Ÿæ’åº
     public static void quickSort(int[] numbers, int start, int end) {   
         if (start < end) {   
-            int base = numbers[start]; // Ñ¡¶¨µÄ»ù×¼Öµ£¨µÚÒ»¸öÊıÖµ×÷Îª»ù×¼Öµ£©   
-            int temp; // ¼ÇÂ¼ÁÙÊ±ÖĞ¼äÖµ   
+            int base = numbers[start]; // Ñ¡ï¿½ï¿½ï¿½Ä»ï¿½×¼Öµï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½Îªï¿½ï¿½×¼Öµï¿½ï¿½   
+            int temp; // ï¿½ï¿½Â¼ï¿½ï¿½Ê±ï¿½Ğ¼ï¿½Öµ   
             int i = start, j = end;   
             do {   
                 while ((numbers[i] < base) && (i < end))   
@@ -45,7 +45,7 @@ public class NumberSort {
                 quickSort(numbers, i, end);   
         }   
     }   
-    //Ñ¡ÔñÅÅĞò 
+    //é€‰æ‹©æ’åº
     public static void selectSort(int[] numbers) {   
         int size = numbers.length, temp;   
         for (int i = 0; i < size; i++) {   
@@ -59,7 +59,7 @@ public class NumberSort {
             numbers[k] = temp;   
         }   
     }   
-    //²åÈëÅÅĞò    
+    //æ’å…¥æ’åº
     // @param numbers  
     public static void insertSort(int[] numbers) {   
         int size = numbers.length, temp, j;   
@@ -70,12 +70,12 @@ public class NumberSort {
             numbers[j] = temp;   
         }   
     }   
-    //¹é²¢ÅÅĞò  
+    //å½’å¹¶æ’åº
     public static void mergeSort(int[] numbers, int left, int right) {   
-        int t = 1;// Ã¿×éÔªËØ¸öÊı   
+        int t = 1;// Ã¿ï¿½ï¿½Ôªï¿½Ø¸ï¿½ï¿½ï¿½   
         int size = right - left + 1;   
         while (t < size) {   
-            int s = t;// ±¾´ÎÑ­»·Ã¿×éÔªËØ¸öÊı   
+            int s = t;// ï¿½ï¿½ï¿½ï¿½Ñ­ï¿½ï¿½Ã¿ï¿½ï¿½Ôªï¿½Ø¸ï¿½ï¿½ï¿½   
             t = 2 * s;   
             int i = left;   
             while (i + (t - 1) < size) {   
@@ -86,7 +86,7 @@ public class NumberSort {
                 merge(numbers, i, i + (s - 1), right);   
         }   
     }    
-    //¹é²¢Ëã·¨ÊµÏÖ  
+    //ï¿½é²¢ï¿½ã·¨Êµï¿½ï¿½  
     private static void merge(int[] data, int p, int q, int r) {   
         int[] B = new int[data.length];   
         int s = p;   
